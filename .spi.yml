@@ -1,0 +1,11 @@
+version: 1
+builder:
+  configs:
+  - platform: ios
+    scheme: NetworkReachabilityRxSwift
+  - platform: macos-xcodebuild
+    scheme: NetworkReachabilityRxSwift
+  - platform: tvos
+    scheme: NetworkReachabilityRxSwift
+  - platform: watchos
+    scheme: NetworkReachabilityRxSwift
