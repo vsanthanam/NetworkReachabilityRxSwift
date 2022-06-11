@@ -1,5 +1,5 @@
 // NetworkReachabilityRxSwift
-// NetworkReachabilityRxSwiftTests.swift
+// DispatchQueue+NetworkReachabilityRxSwift.swift
 //
 // MIT License
 //
@@ -23,14 +23,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import NetworkReachabilityRxSwift
-import XCTest
+import Dispatch
+import Foundation
 
-final class NetworkReachabilityRxSwiftTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(NetworkReachabilityRxSwift().text, "Hello, World!")
+extension DispatchQueue {
+
+    private static func frameworkQueue(_ name: String, fallback: String) -> DispatchQueue {
+        let label: String
+        if let bundleIdentifier = Bundle.main.bundleIdentifier {
+            label = [bundleIdentifier, name].joined(separator: ".")
+        } else {
+            label = [fallback, name].joined(separator: ".")
+        }
+
+        let queue = DispatchQueue(label: label)
+        return queue
     }
+
+    private static func networkReachabilityQueue(name: String) -> DispatchQueue {
+        frameworkQueue(name, fallback: "com.varunsanthanam.NetworkReachability")
+    }
+
+    static var networkMonitorQueue: DispatchQueue {
+        networkReachabilityQueue(name: "NetworkMonitor")
+    }
+
+    static var reachabilityMonitorQueue: DispatchQueue {
+        networkReachabilityQueue(name: "ReachabilityMonitor")
+    }
+
 }

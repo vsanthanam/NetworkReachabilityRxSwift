@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "networkreachability",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vsanthanam/NetworkReachability.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "d86d0587d888f75edbf16a0fb45857ba05f4776e"
+      }
+    },
+    {
+      "identity" : "rxswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactiveX/RxSwift.git",
+      "state" : {
+        "revision" : "b4307ba0b6425c0ba4178e138799946c3da594f8",
+        "version" : "6.5.0"
+      }
+    }
+  ],
+  "version" : 2
+}
