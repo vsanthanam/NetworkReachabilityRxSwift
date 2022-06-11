@@ -1,5 +1,5 @@
 // NetworkReachabilityRxSwift
-// NetworkReachabilityRxSwiftTests.swift
+// ReachabilityMonitorExtensionsTests.swift
 //
 // MIT License
 //
@@ -23,26 +23,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Network
 import NetworkReachability
 @testable import NetworkReachabilityRxSwift
 import RxSwift
 import XCTest
 
-final class NetworkMonitorExtensionsTests: XCTestCase {
+final class ReachabilityMonitorExtensionsTests: XCTestCase {
 
     var disposable: Disposable?
 
     func test_observable_status() {
         let expectation = expectation(description: "pass")
 
-        disposable = NetworkMonitor.observableNetworkPath
-            .map(\.status)
+        disposable = ReachabilityMonitor.observableReachability
+            .map(\.status.isReachable)
             .distinctUntilChanged()
-            .subscribe(onNext: { status in
-                XCTAssertEqual(status, .satisfied)
+            .subscribe { isReachable in
+                XCTAssertTrue(isReachable)
                 expectation.fulfill()
-            })
+            } onError: { error in
+                XCTFail()
+            }
 
         waitForExpectations(timeout: 5)
     }
@@ -50,12 +51,14 @@ final class NetworkMonitorExtensionsTests: XCTestCase {
     func test_single_status() {
         let expectation = expectation(description: "pass")
 
-        disposable = NetworkMonitor.singleNetworkPath
-            .map(\.status)
-            .subscribe(onSuccess: { status in
-                XCTAssertEqual(status, .satisfied)
+        disposable = ReachabilityMonitor.singleReachability
+            .map(\.status.isReachable)
+            .subscribe { isReachable in
+                XCTAssertTrue(isReachable)
                 expectation.fulfill()
-            })
+            } onFailure: { error in
+                XCTFail()
+            }
 
         waitForExpectations(timeout: 5)
     }

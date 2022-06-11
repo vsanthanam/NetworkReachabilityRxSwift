@@ -29,7 +29,7 @@ import RxSwift
 
 public extension ReachabilityMonitor {
 
-    var reachabilityObservable: Observable<Reachability> {
+    static var observableReachability: Observable<Reachability> {
         if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
             return Observable.create { observer in
                 let task = Task {
@@ -65,7 +65,7 @@ public extension ReachabilityMonitor {
         }
     }
 
-    var reachabilitySingle: Single<Reachability> {
+    static var singleReachability: Single<Reachability> {
         Single.create { observer in
             do {
                 let reachability = try ReachabilityMonitor.reachability

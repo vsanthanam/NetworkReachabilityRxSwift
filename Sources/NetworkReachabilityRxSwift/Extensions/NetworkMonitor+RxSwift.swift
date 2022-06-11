@@ -32,7 +32,7 @@ import RxSwift
 @available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
 public extension NetworkMonitor {
 
-    var observableNetworkPath: Observable<NWPath> {
+    static var observableNetworkPath: Observable<NWPath> {
         if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
             return Observable
                 .create { observer in
@@ -60,7 +60,7 @@ public extension NetworkMonitor {
         }
     }
 
-    func observableNetworkPath(requiringInterfaceType interfaceType: NWInterface.InterfaceType) -> Observable<NWPath> {
+    static func observableNetworkPath(requiringInterfaceType interfaceType: NWInterface.InterfaceType) -> Observable<NWPath> {
         if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
             return Observable
                 .create { observer in
@@ -89,7 +89,7 @@ public extension NetworkMonitor {
     }
 
     @available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *)
-    func observableNetworkPath(prohibitingInterfaceTypes interfaceTypes: [NWInterface.InterfaceType]) -> Observable<NWPath> {
+    static func observableNetworkPath(prohibitingInterfaceTypes interfaceTypes: [NWInterface.InterfaceType]) -> Observable<NWPath> {
         Observable
             .create { observer in
                 let task = Task {
@@ -104,7 +104,7 @@ public extension NetworkMonitor {
             }
     }
 
-    var singleNetworkPath: Single<NWPath> {
+    static var singleNetworkPath: Single<NWPath> {
         Single.create { observer in
             if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
                 let task = Task {
