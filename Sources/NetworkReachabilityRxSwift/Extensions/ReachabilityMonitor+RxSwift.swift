@@ -27,8 +27,23 @@ import Foundation
 import NetworkReachability
 import RxSwift
 
+@available(macOS 10.13, iOS 11, watchOS 4, tvOS 11, *)
 public extension ReachabilityMonitor {
 
+    /// An `Observable` of reachability updates
+    ///
+    /// Use this property to observe reachability updates with [RxSwift](https://github.com/ReactiveX/RxSwift).
+    ///
+    /// ```swift
+    /// let disposable = ReachabilityMonitor.observableReachability
+    ///     .map(\.status.isReachable)
+    ///     .distinctUntilChanged()
+    ///     .subscribe(onNext: { isReachable in
+    ///         // Do something with `isReachable`
+    ///     }, onError: { error in
+    ///         // Handle error
+    ///     })
+    /// ```
     static var observableReachability: Observable<Reachability> {
         if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
             return Observable.create { observer in
@@ -65,6 +80,19 @@ public extension ReachabilityMonitor {
         }
     }
 
+    /// A `Single` of reachability updates
+    ///
+    /// Use this property to retrieve the latest reachability with [RxSwift](https://github.com/ReactiveX/RxSwift).
+    ///
+    /// ```swift
+    /// let disposable = ReachabilityMonitor.singleReachability
+    ///     .map(\.status.isReachable)
+    ///     .subscribe(onSuccess: { isReachable in
+    ///         // Do something with `isReachable`
+    ///     }, onFailure: { error in
+    ///         // Handle error
+    ///     })
+    /// ```
     static var singleReachability: Single<Reachability> {
         Single.create { observer in
             do {

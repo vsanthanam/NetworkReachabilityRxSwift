@@ -32,6 +32,20 @@ import RxSwift
 @available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
 public extension NetworkMonitor {
 
+    /// An `Observable` of network path updates
+    ///
+    /// Use this property to observe network path updates using [RxSwift](https://github.com/ReactiveX/RxSwift)
+    ///
+    /// ```swift
+    /// let disposable = NetworkMonitor.observableNetworkPath
+    ///     .map { path in
+    ///         path.status == .satisfied
+    ///     }
+    ///     .distinctUntilChanged()
+    ///     .subscribe(onNext: { isSatisfied in
+    ///         // Do something with `isSatisfied`
+    ///     })
+    /// ```
     static var observableNetworkPath: Observable<NWPath> {
         if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
             return Observable
@@ -60,6 +74,20 @@ public extension NetworkMonitor {
         }
     }
 
+    /// An `Observable` of network path updates for a specific interface
+    ///
+    /// Use this property to observe network path updates using [RxSwift](https://github.com/ReactiveX/RxSwift)
+    ///
+    /// ```swift
+    /// let disposable = NetworkMonitor.observableNetworkPath(requiringInterfaceType: .wifi)
+    ///     .map { path in
+    ///         path.status == .satisfied
+    ///     }
+    ///     .distinctUntilChanged()
+    ///     .subscribe(onNext: { isSatisfied in
+    ///         // Do something with `isSatisfied`
+    ///     })
+    /// ```
     static func observableNetworkPath(requiringInterfaceType interfaceType: NWInterface.InterfaceType) -> Observable<NWPath> {
         if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
             return Observable
@@ -88,6 +116,20 @@ public extension NetworkMonitor {
         }
     }
 
+    /// An `Observable` of network path updates for interface types that are not explicitly prohibited.
+    ///
+    /// Use this property to observe network path updates using [RxSwift](https://github.com/ReactiveX/RxSwift)
+    ///
+    /// ```swift
+    /// let disposable = NetworkMonitor.observableNetworkPath(prohibitingInterfaceTypes: [.wifi, .wiredEthernet])
+    ///     .map { path in
+    ///         path.status == .satisfied
+    ///     }
+    ///     .distinctUntilChanged()
+    ///     .subscribe(onNext: { isSatisfied in
+    ///         // Do something with `isSatisfied`
+    ///     })
+    /// ```
     @available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *)
     static func observableNetworkPath(prohibitingInterfaceTypes interfaceTypes: [NWInterface.InterfaceType]) -> Observable<NWPath> {
         Observable
@@ -104,6 +146,16 @@ public extension NetworkMonitor {
             }
     }
 
+    /// Retrieve the latest known network path using [RxSwift](https://github.com/ReactiveX/RxSwift)
+    ///
+    /// ```swift
+    /// func updateReachability() {
+    ///     _ = NetworkMonitor.singleNetworkPath
+    ///         .subscribe(onNext: { path in
+    ///             // Do something with `path`
+    ///         })
+    /// }
+    /// ```
     static var singleNetworkPath: Single<NWPath> {
         Single.create { observer in
             if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
