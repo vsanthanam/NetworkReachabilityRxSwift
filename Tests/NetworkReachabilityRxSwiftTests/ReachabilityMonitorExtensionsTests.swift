@@ -28,6 +28,7 @@ import NetworkReachability
 import RxSwift
 import XCTest
 
+@available(macOS 10.13, iOS 11, watchOS 4, tvOS 11, *)
 final class ReachabilityMonitorExtensionsTests: XCTestCase {
 
     var disposable: Disposable?
