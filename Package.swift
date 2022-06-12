@@ -19,7 +19,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vsanthanam/NetworkReachability.git", from: "1.1.0"),
-        .package(url: "https://github.com/ReactiveX/RxSwift.git", from: "6.0.0")
+        .package(url: "https://github.com/ReactiveX/RxSwift.git", from: "6.0.0"),
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0")
     ],
     targets: [
         .target(
