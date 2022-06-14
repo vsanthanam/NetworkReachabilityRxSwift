@@ -16,7 +16,7 @@ To add NetworkReachabilityRxSwift as a dependency to an existing Swift package, 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/vsanthanam/NetworkReachabilityRxSwift.git", from: "1.0.0")),
+    .package(url: "https://github.com/vsanthanam/NetworkReachability.git", from: "1.0.0")),
     .package(url: "https://github.com/vsanthanam/NetworkReachabilityRxSwift.git", from: "1.0.0"))
 ]
 ```
