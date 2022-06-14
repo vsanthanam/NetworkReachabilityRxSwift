@@ -23,10 +23,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Darwin
 import Foundation
 import NetworkReachability
 import RxSwift
 
+/// RxSwift bindings for `ReachabilityMonitor`
 @available(macOS 10.13, iOS 11, watchOS 4, tvOS 11, *)
 public extension ReachabilityMonitor {
 
@@ -46,37 +48,164 @@ public extension ReachabilityMonitor {
     /// ```
     static var observableReachability: Observable<Reachability> {
         if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
-            return Observable.create { observer in
-                let task = Task {
-                    do {
-                        for try await reachability in ReachabilityMonitor.reachabilityUpdates {
-                            observer.on(.next(reachability))
-                        }
-                        observer.on(.completed)
-                    } catch {
-                        observer.on(.error(error))
-                    }
-                }
-                return Disposables.create {
-                    task.cancel()
-                }
-            }
-        } else {
-            return Observable.create { observer in
-                do {
-                    _ = try ReachabilityMonitor { _, result in
+            return Observable
+                .create { observer in
+                    let task = Task {
                         do {
-                            let reachability = try result.get()
-                            observer.on(.next(reachability))
+                            for try await reachability in ReachabilityMonitor.reachabilityUpdates {
+                                observer.on(.next(reachability))
+                            }
+                            observer.on(.completed)
                         } catch {
                             observer.on(.error(error))
                         }
                     }
-                } catch {
-                    observer.on(.error(error))
+                    return Disposables.create {
+                        task.cancel()
+                    }
                 }
-                return Disposables.create()
-            }
+        } else {
+            return Observable
+                .create { observer in
+                    let queue = DispatchQueue.reachabilityMonitorQueue
+                    do {
+                        _ = try ReachabilityMonitor { _, result in
+                            do {
+                                let reachability = try result.get()
+                                queue.async {
+                                    observer.on(.next(reachability))
+                                }
+                            } catch {
+                                queue.async {
+                                    observer.on(.error(error))
+                                }
+                            }
+                        }
+                    } catch {
+                        queue.async {
+                            observer.on(.error(error))
+                        }
+                    }
+                    return Disposables.create()
+                }
+        }
+    }
+
+    /// An `Observable` of reachability updates for a specific host
+    ///
+    /// Use this property to observe reachability updates with [RxSwift](https://github.com/ReactiveX/RxSwift).
+    ///
+    /// ```swift
+    /// let disposable = ReachabilityMonitor.observableReachability(forHost: "www.apple.com")
+    ///     .map(\.status.isReachable)
+    ///     .distinctUntilChanged()
+    ///     .subscribe(onNext: { isReachable in
+    ///         // Do something with `isReachable`
+    ///     }, onError: { error in
+    ///         // Handle error
+    ///     })
+    /// ```
+    static func observableReachability(forHost host: String) -> Observable<Reachability> {
+        if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
+            return Observable
+                .create { observer in
+                    let task = Task {
+                        do {
+                            for try await reachability in ReachabilityMonitor.reachabilityUpdates(forHost: host) {
+                                observer.on(.next(reachability))
+                            }
+                            observer.on(.completed)
+                        } catch {
+                            observer.on(.error(error))
+                        }
+                    }
+                    return Disposables.create {
+                        task.cancel()
+                    }
+                }
+        } else {
+            return Observable
+                .create { observer in
+                    let queue = DispatchQueue.reachabilityMonitorQueue
+                    do {
+                        _ = try ReachabilityMonitor(host: host) { _, result in
+                            do {
+                                let reachability = try result.get()
+                                queue.async {
+                                    observer.on(.next(reachability))
+                                }
+                            } catch {
+                                queue.async {
+                                    observer.on(.error(error))
+                                }
+                            }
+                        }
+                    } catch {
+                        queue.async {
+                            observer.on(.error(error))
+                        }
+                    }
+                    return Disposables.create()
+                }
+        }
+    }
+
+    /// An `Observable` of reachability updates for a specific socket address
+    ///
+    /// Use this property to observe reachability updates with [RxSwift](https://github.com/ReactiveX/RxSwift).
+    ///
+    /// ```swift
+    /// let disposable = ReachabilityMonitor.observableReachability(forAddress: myAddress)
+    ///     .map(\.status.isReachable)
+    ///     .distinctUntilChanged()
+    ///     .subscribe(onNext: { isReachable in
+    ///         // Do something with `isReachable`
+    ///     }, onError: { error in
+    ///         // Handle error
+    ///     })
+    /// ```
+    static func observableReachability(forAddress address: sockaddr) -> Observable<Reachability> {
+        if #available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *) {
+            return Observable
+                .create { observer in
+                    let task = Task {
+                        do {
+                            for try await reachability in ReachabilityMonitor.reachabilityUpdates(forAddress: address) {
+                                observer.on(.next(reachability))
+                            }
+                            observer.on(.completed)
+                        } catch {
+                            observer.on(.error(error))
+                        }
+                    }
+                    return Disposables.create {
+                        task.cancel()
+                    }
+                }
+        } else {
+            return Observable
+                .create { observer in
+                    let queue = DispatchQueue.reachabilityMonitorQueue
+                    do {
+                        _ = try ReachabilityMonitor(address: address) { _, result in
+                            do {
+                                let reachability = try result.get()
+                                queue.async {
+                                    observer.on(.next(reachability))
+                                }
+                            } catch {
+                                queue.async {
+                                    observer.on(.error(error))
+                                }
+                            }
+                        }
+                    } catch {
+                        queue.async {
+                            observer.on(.error(error))
+                        }
+                    }
+                    return Disposables.create()
+                }
         }
     }
 
