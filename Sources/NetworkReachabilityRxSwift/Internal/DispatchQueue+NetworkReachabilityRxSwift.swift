@@ -26,7 +26,7 @@
 import Dispatch
 import Foundation
 
-@available(macOS 10.13, iOS 11, watchOS 4, tvOS 11, *)
+@available(macOS 10.13, iOS 11, watchOS 5, tvOS 11, *)
 extension DispatchQueue {
 
     private static func frameworkQueue(_ name: String, fallback: String) -> DispatchQueue {

@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vsanthanam/NetworkReachability.git",
       "state" : {
-        "revision" : "4cbd8249ad292fa83cc717f3ae666e9c531f430c",
-        "version" : "1.1.1"
+        "revision" : "fcc261b948c60e6ee2eef43b9ce1116e24dc5ebd",
+        "version" : "1.2.1"
       }
     },
     {
