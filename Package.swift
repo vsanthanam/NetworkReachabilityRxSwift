@@ -9,7 +9,7 @@ let package = Package(
         .iOS(.v11),
         .macOS(.v10_13),
         .tvOS(.v11),
-        .watchOS(.v4)
+        .watchOS(.v5)
     ],
     products: [
         .library(
@@ -18,7 +18,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/vsanthanam/NetworkReachability.git", from: "1.1.1"),
+        .package(url: "https://github.com/vsanthanam/NetworkReachability.git", from: "1.2.1"),
         .package(url: "https://github.com/ReactiveX/RxSwift.git", from: "6.0.0"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0")
     ],

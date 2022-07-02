@@ -23,48 +23,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import NetworkReachability
-@testable import NetworkReachabilityRxSwift
-import RxSwift
-import XCTest
+#if !os(watchOS)
+    import NetworkReachability
+    @testable import NetworkReachabilityRxSwift
+    import RxSwift
+    import XCTest
 
-@available(macOS 10.13, iOS 11, watchOS 4, tvOS 11, *)
-final class ReachabilityMonitorExtensionsTests: XCTestCase {
+    @available(macOS 10.13, iOS 11, tvOS 11, *)
+    final class ReachabilityMonitorExtensionsTests: XCTestCase {
 
-    var disposable: Disposable?
+        var disposable: Disposable?
 
-    func test_observable_status() {
-        let expectation = expectation(description: "pass")
+        func test_observable_status() {
+            let expectation = expectation(description: "pass")
 
-        disposable = ReachabilityMonitor.observableReachability
-            .map(\.status.isReachable)
-            .distinctUntilChanged()
-            .subscribe { isReachable in
-                XCTAssertTrue(isReachable)
-                expectation.fulfill()
-            } onError: { error in
-                XCTFail()
-            }
+            disposable = ReachabilityMonitor.observableReachability
+                .map(\.status.isReachable)
+                .distinctUntilChanged()
+                .subscribe { isReachable in
+                    XCTAssertTrue(isReachable)
+                    expectation.fulfill()
+                } onError: { error in
+                    XCTFail()
+                }
 
-        waitForExpectations(timeout: 5)
+            waitForExpectations(timeout: 5)
+        }
+
+        func test_single_status() {
+            let expectation = expectation(description: "pass")
+
+            disposable = ReachabilityMonitor.singleReachability
+                .map(\.status.isReachable)
+                .subscribe { isReachable in
+                    XCTAssertTrue(isReachable)
+                    expectation.fulfill()
+                } onFailure: { error in
+                    XCTFail()
+                }
+
+            waitForExpectations(timeout: 5)
+        }
+
+        deinit {
+            disposable?.dispose()
+        }
     }
-
-    func test_single_status() {
-        let expectation = expectation(description: "pass")
-
-        disposable = ReachabilityMonitor.singleReachability
-            .map(\.status.isReachable)
-            .subscribe { isReachable in
-                XCTAssertTrue(isReachable)
-                expectation.fulfill()
-            } onFailure: { error in
-                XCTFail()
-            }
-
-        waitForExpectations(timeout: 5)
-    }
-
-    deinit {
-        disposable?.dispose()
-    }
-}
+#endif
