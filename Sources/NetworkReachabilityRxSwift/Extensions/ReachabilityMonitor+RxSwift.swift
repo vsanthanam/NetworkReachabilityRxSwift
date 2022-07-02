@@ -225,15 +225,68 @@ import RxSwift
         ///     })
         /// ```
         static var singleReachability: Single<Reachability> {
-            Single.create { observer in
-                do {
-                    let reachability = try ReachabilityMonitor.reachability
-                    observer(.success(reachability))
-                } catch {
-                    observer(.failure(error))
+            Single
+                .create { observer in
+                    do {
+                        let reachability = try ReachabilityMonitor.reachability
+                        observer(.success(reachability))
+                    } catch {
+                        observer(.failure(error))
+                    }
+                    return Disposables.create()
                 }
-                return Disposables.create()
-            }
+        }
+
+        /// A `Single` of reachability updates for a specific host
+        ///
+        /// Use this property to retrieve the latest reachability with [RxSwift](https://github.com/ReactiveX/RxSwift).
+        ///
+        /// ```swift
+        /// let disposable = ReachabilityMonitor.singleReachability(forHost: "www.apple.com")
+        ///     .map(\.status.isReachable)
+        ///     .subscribe(onSuccess: { isReachable in
+        ///         // Do something with `isReachable`
+        ///     }, onFailure: { error in
+        ///         // Handle error
+        ///     })
+        /// ```
+        static func singleReachability(forHost host: String) -> Single<Reachability> {
+            Single
+                .create { observer in
+                    do {
+                        let reachability = try ReachabilityMonitor.reachability(forHost: host)
+                        observer(.success(reachability))
+                    } catch {
+                        observer(.failure(error))
+                    }
+                    return Disposables.create()
+                }
+        }
+
+        /// A `Single` of reachability updates for a specific address
+        ///
+        /// Use this property to retrieve the latest reachability with [RxSwift](https://github.com/ReactiveX/RxSwift).
+        ///
+        /// ```swift
+        /// let disposable = ReachabilityMonitor.singleReachability(forAddress: myAddress)
+        ///     .map(\.status.isReachable)
+        ///     .subscribe(onSuccess: { isReachable in
+        ///         // Do something with `isReachable`
+        ///     }, onFailure: { error in
+        ///         // Handle error
+        ///     })
+        /// ```
+        static func singleReachability(forAddress address: sockaddr) -> Single<Reachability> {
+            Single
+                .create { observer in
+                    do {
+                        let reachability = try ReachabilityMonitor.reachability(forAddress: address)
+                        observer(.success(reachability))
+                    } catch {
+                        observer(.failure(error))
+                    }
+                    return Disposables.create()
+                }
         }
 
     }
