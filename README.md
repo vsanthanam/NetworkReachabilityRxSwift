@@ -1,4 +1,3 @@
-# NetworkReachabilityRxSwift
 
 [![MIT License](https://img.shields.io/github/license/vsanthanam/NetworkReachabilityRxSwift)](https://github.com/vsanthanam/AnyAsyncSequence/blob/main/LICENSE)
 [![Package Releases](https://img.shields.io/github/v/release/vsanthanam/NetworkReachabilityRxSwift)](https://github.com/vsanthanam/NetworkReachabilityRxSwift/releases)
