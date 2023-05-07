@@ -2,7 +2,7 @@
 
 [![MIT License](https://img.shields.io/github/license/vsanthanam/NetworkReachabilityRxSwift)](https://github.com/vsanthanam/AnyAsyncSequence/blob/main/LICENSE)
 [![Package Releases](https://img.shields.io/github/v/release/vsanthanam/NetworkReachabilityRxSwift)](https://github.com/vsanthanam/NetworkReachabilityRxSwift/releases)
-[![Build Results](https://img.shields.io/github/workflow/status/vsanthanam/NetworkReachabilityRxSwift/spm-build-test)](https://img.shields.io/github/workflow/status/vsanthanam/NetworkReachabilityRxSwift/spm-build-test.yml)
+[![Build Results](https://img.shields.io/github/actions/workflow/status/vsanthanam/NetworkReachabilityRxSwift/spm-build-test.yml)](https://github.com/vsanthanam/NetworkReachability/actions/workflows/spm-build-test.yml)
 [![Swift Version](https://img.shields.io/badge/swift-5.8-critical)](https://swift.org)
 [![Supported Platforms](https://img.shields.io/badge/platform-iOS%2011%20%7C%20macOS%2010.13%20%7C%20tvOS%2011%20%7C%20watchOS%205-lightgrey)](https://developer.apple.com)
 
