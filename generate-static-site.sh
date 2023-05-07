@@ -14,11 +14,6 @@ fix_readme () {
     tail -n +2 README.md > README-2.md && mv README-2.md README.md
 }
 
-configure_site () {
-    echo "reachability.tools" > CNAME
-    echo "theme: jekyll-theme-modernist" > _config.yml
-}
-
 commit_and_publish () {
     git add .
     git commit -m 'Synchronize Hompage & Publish Documentation'
@@ -35,7 +30,6 @@ generate_documentation () {
     create_branches
     run_docc
     fix_readme
-    configure_site
     commit_and_publish
     clean_up
 }
